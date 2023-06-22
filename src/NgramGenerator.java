@@ -1,14 +1,20 @@
 /**
  * @author : Nithin Bharathi 22-Jun-2023
  */
-import java.util.*;
-public class NgramGenerator {
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+public class NgramGenerator{
 	
-	private static final ArrayList<String> text = readData();
+	private static ArrayList<String> text;
 	private static final int order = 3,count = 10;
 	private static HashMap<String,ArrayList<String>>possibilities = new HashMap<>();
 	private static ArrayList<String> beginningPossibilities = new ArrayList<>();
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws Exception{
+		text = readData();
 		for(String line:text){
 			int len = line.length();
 			for(int i=0;i+order<len;i++){
@@ -21,8 +27,7 @@ public class NgramGenerator {
 				possibilities.put(ngram,possibility);
 			}
 		}
-
-		System.out.println(possibilities);
+		
 		predict();
 	}
 	
@@ -47,11 +52,16 @@ public class NgramGenerator {
 		return possibility.stream().skip((int)(size*Math.random())).findFirst().map(Object::toString).orElse(null);
 	}
 	
-	private static ArrayList<String> readData(){
-		String str[] = "abcd the their of the world on more and themost of allthere is to make sureof the animotronicthe".split(" ");
-		ArrayList<String> li = new ArrayList<>();
-		for(String it:str)li.add(it);
-		return li;
+	private static ArrayList<String> readData() throws Exception{
+		File file = new File("/Users/nithinbharathi/Desktop/Names.txt");
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line = null;
+		ArrayList<String> lines = new ArrayList<>();
+		while((line = reader.readLine()) != null){
+			lines.add(line);
+		}
+		
+		return lines;
 	}
 
 }
